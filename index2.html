@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tech book club — Join the ultimate tech book club</title>
+
+    <!-- Google Fonts: Martian Mono (for technical headings & mono accents) and Inter (for crisp body copy) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Martian+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['"Martian Mono"', 'monospace'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        slateDark: '#062630',
+                        slateText: '#385159',
+                        warmBeige: '#FAF5F3',
+                        lightSalmon: '#FFF5EF',
+                        salmonBorder: '#FEA36F',
+                        softBlueGlow: '#9CC9DA',
+                    },
+                },
+            },
+        };
+    </script>
+
+    <style>
+        /* Custom Design Tokens & Grid Pattern Utilities */
+        :root {
+            --bg-warm: #FAF5F3;
+            --slate-deep: #062630;
+            --slate-muted: #385159;
+            --salmon-accent: #FEA36F;
+            --salmon-tint: #FFF5EF;
+            --blue-glow: rgba(156, 201, 218, 0.45);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--slate-deep);
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .font-martian {
+            font-family: 'Martian Mono', monospace;
+        }
+
+        /* Warm light grid background with soft right-side radial blue glow */
+        .bg-hero-grid {
+            background-color: #FAF5F3;
+            background-image:
+                radial-gradient(circle at 88% 78%, rgba(156, 201, 218, 0.55) 0%, rgba(156, 201, 218, 0.15) 38%, transparent 68%),
+                linear-gradient(to right, rgba(226, 218, 213, 0.48) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(226, 218, 213, 0.48) 1px, transparent 1px);
+            background-size: 100% 100%, 44px 44px, 44px 44px;
+        }
+
+        /* Journey card subtle grid + soft blue bottom-right radial glow */
+        .bg-journey-grid {
+            background-color: #FAF5F3;
+            background-image:
+                radial-gradient(circle at 92% 85%, rgba(156, 201, 218, 0.6) 0%, rgba(156, 201, 218, 0.15) 42%, transparent 72%),
+                linear-gradient(to right, rgba(226, 218, 213, 0.48) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(226, 218, 213, 0.48) 1px, transparent 1px);
+            background-size: 100% 100%, 42px 42px, 42px 42px;
+        }
+
+        /* Pro Pricing Card highlighted tint + soft bottom-right blue glow */
+        .bg-pro-card {
+            background-color: #FAF5F3;
+            background-image:
+                radial-gradient(circle at 90% 88%, rgba(156, 201, 218, 0.65) 0%, rgba(156, 201, 218, 0.18) 45%, transparent 75%);
+        }
+
+        /* Dark slate footer with subtle grid lines */
+        .bg-footer-grid {
+            background-color: #062630;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+            background-size: 44px 44px;
+        }
+
+        /* Warm copper-orange to deep slate gradient text for main Hero headline */
+        .hero-gradient-text {
+            background: linear-gradient(107deg, #FEA36F -11.37%, #062630 61.84%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Tactile button hover & focus transitions */
+        .btn-outline-dark {
+            background-color: #FFF5EF;
+            border: 2px solid #062630;
+            color: #062630;
+            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .btn-outline-dark:hover {
+            background: linear-gradient(90deg, #FFE3D1 0%, #FFF5EF 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(6, 38, 48, 0.12);
+        }
+
+        .btn-outline-dark:focus-visible {
+            outline: 3px solid #062630;
+            outline-offset: 3px;
+        }
+
+        .btn-outline-light {
+            background-color: transparent;
+            border: 2px solid #FFFFFF;
+            color: #FFFFFF;
+            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .btn-outline-light:hover {
+            background: linear-gradient(90deg, #385159 0%, #062630 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-light:focus-visible {
+            outline: 3px solid #FFFFFF;
+            outline-offset: 3px;
+        }
+
+        /* Subtle floating animation for overlapping tech badges */
+        @keyframes floatSlow {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        .badge-float {
+            animation: floatSlow 5s ease-in-out infinite;
+        }
+
+        .badge-float-delay-1 {
+            animation: floatSlow 5s ease-in-out 1.4s infinite;
+        }
+
+        .badge-float-delay-2 {
+            animation: floatSlow 5s ease-in-out 2.8s infinite;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-[#FEA36F]/30 selection:text-[#062630]">
+
+    <!-- =========================================================
+       HEADER & HERO SECTION (Warm Beige Grid + Right Blue Glow)
+       ========================================================= -->
+    <div class="bg-hero-grid border-b border-[#E6E1DF]/60">
+        <!-- Top Header -->
+        <header class="max-w-[1170px] mx-auto px-5 sm:px-8 lg:px-10 pt-7 sm:pt-9 pb-4">
+            <a href="#" class="inline-flex items-center gap-3.5 group focus:outline-none">
+                <!-- Custom Book / Tech Emblem Logo -->
+                <span
+                    class="w-9 h-9 rounded-lg bg-[#062630] flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="4" y="4" width="6.5" height="16" rx="1.5" fill="#FEA36F" />
+                        <path
+                            d="M13.5 5.5C13.5 4.67157 14.1716 4 15 4H18.5C19.3284 4 20 4.67157 20 5.5V18.5C20 19.3284 19.3284 20 18.5 20H15C14.1716 20 13.5 19.3284 13.5 18.5V5.5Z"
+                            fill="#FAF5F3" />
+                        <path d="M7.25 8V16" stroke="#062630" stroke-width="1.6" stroke-linecap="round" />
+                    </svg>
+                </span>
+                <span class="font-martian text-[17px] sm:text-[19px] font-semibold tracking-tight text-[#062630]">
+                    Tech book club
+                </span>
+            </a>
+        </header>
+
+        <!-- Hero Content -->
+        <section class="max-w-[1170px] mx-auto px-5 sm:px-8 lg:px-10 pt-8 sm:pt-12 lg:pt-14 pb-16 sm:pb-20 lg:pb-24">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                <!-- Left Column: Gradient Headline, Paragraph, CTA & Social Proof -->
+                <div class="lg:col-span-6 space-y-6 sm:space-y-7">
+                    <h1
+                        class="font-martian hero-gradient-text font-bold text-[36px] sm:text-[52px] lg:text-[56px] leading-[1.15] tracking-[-0.03em]">
+                        Join the ultimate tech book club
+                    </h1>
+
+                    <p class="text-[#385159] text-[17px] sm:text-[19px] leading-[1.6] max-w-[540px]">
+                        Turn your reading time into learning time with fellow tech enthusiasts. Get curated
+                        recommendations, join vibrant discussions, and level up your skills one chapter at a time.
+                    </p>
+
+                    <div class="pt-1">
+                        <a href="#membership"
+                            class="btn-outline-dark inline-flex items-center justify-center gap-3.5 px-6 sm:px-7 py-4 rounded-lg font-martian text-[14px] sm:text-[15px] font-semibold tracking-wider uppercase w-full sm:w-auto">
+                            <span>REVIEW MEMBERSHIP OPTIONS</span>
+                            <svg class="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M10 4V16M10 16L5 11M10 16L15 11" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Avatar Stack + 5 Stars + Social Proof -->
+                    <div class="flex items-center gap-3.5 pt-1">
+                        <div class="flex -space-x-2.5 shrink-0">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
+                                onerror="this.src='https://placehold.co/80x80/062630/FAF5F3?text=A1'"
+                                alt="Developer member portrait"
+                                class="w-10 h-10 rounded-full object-cover ring-2 ring-[#FAF5F3]" />
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80"
+                                onerror="this.src='https://placehold.co/80x80/385159/FAF5F3?text=A2'"
+                                alt="Developer member portrait"
+                                class="w-10 h-10 rounded-full object-cover ring-2 ring-[#FAF5F3]" />
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80"
+                                onerror="this.src='https://placehold.co/80x80/FEA36F/062630?text=A3'"
+                                alt="Developer member portrait"
+                                class="w-10 h-10 rounded-full object-cover ring-2 ring-[#FAF5F3]" />
+                        </div>
+
+                        <div class="space-y-1">
+                            <!-- 5 Orange Stars -->
+                            <div class="flex items-center gap-1" aria-label="5 out of 5 stars">
+                                <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                            <p class="font-martian text-[12px] sm:text-[13px] text-[#385159] tracking-tight">
+                                200+ developers joined already
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Rounded-Corner Photo of Developers Discussing Books -->
+                <div class="lg:col-span-6">
+                    <div class="rounded-2xl overflow-hidden shadow-md bg-[#E6E1DF]">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1100&q=85"
+                            onerror="this.src='https://placehold.co/800x840/E6E1DF/062630?text=Developers+Reading+Together'"
+                            alt="Diverse group of developers reading and discussing technical books around a table"
+                            class="w-full h-[360px] sm:h-[480px] lg:h-[580px] object-cover object-center" />
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- =========================================================
+       SECTION 3: READ TOGETHER, GROW TOGETHER
+       ========================================================= -->
+    <section class="max-w-[1170px] mx-auto px-5 sm:px-8 lg:px-10 py-16 sm:py-24 lg:py-28">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+            <!-- Left Column: Rounded Photo (Order 2 on mobile so text leads, Order 1 on desktop) -->
+            <div class="lg:col-span-6 order-2 lg:order-1">
+                <div class="rounded-2xl overflow-hidden shadow-sm bg-[#E6E1DF]">
+                    <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1100&q=85"
+                        onerror="this.src='https://placehold.co/800x760/E6E1DF/062630?text=Tech+Book+Meetup'"
+                        alt="Developers gathered in a cozy study session discussing engineering books"
+                        class="w-full h-[340px] sm:h-[450px] lg:h-[520px] object-cover object-center" />
+                </div>
+            </div>
+
+            <!-- Right Column: Heading + 4 Checklist Items -->
+            <div class="lg:col-span-6 order-1 lg:order-2 space-y-7">
+                <h2
+                    class="font-martian font-semibold text-[32px] sm:text-[42px] lg:text-[46px] leading-[1.2] tracking-[-0.02em] text-[#062630]">
+                    Read together, grow together
+                </h2>
+
+                <ul class="space-y-5">
+                    <!-- Item 1 -->
+                    <li class="flex items-start gap-4">
+                        <span
+                            class="mt-0.5 w-6 h-6 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0 text-[#385159]">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <span class="text-[#385159] text-[17px] sm:text-[19px] leading-[1.5]">
+                            Monthly curated tech reads selected by industry experts
+                        </span>
+                    </li>
+
+                    <!-- Item 2 -->
+                    <li class="flex items-start gap-4">
+                        <span
+                            class="mt-0.5 w-6 h-6 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0 text-[#385159]">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <span class="text-[#385159] text-[17px] sm:text-[19px] leading-[1.5]">
+                            Virtual and in-person meetups for deep-dive discussions
+                        </span>
+                    </li>
+
+                    <!-- Item 3 -->
+                    <li class="flex items-start gap-4">
+                        <span
+                            class="mt-0.5 w-6 h-6 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0 text-[#385159]">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <span class="text-[#385159] text-[17px] sm:text-[19px] leading-[1.5]">
+                            Early access to new tech book releases
+                        </span>
+                    </li>
+
+                    <!-- Item 4 -->
+                    <li class="flex items-start gap-4">
+                        <span
+                            class="mt-0.5 w-6 h-6 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0 text-[#385159]">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <span class="text-[#385159] text-[17px] sm:text-[19px] leading-[1.5]">
+                            Author Q&amp;A sessions with tech thought leaders
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================
+       SECTION 4: NOT YOUR AVERAGE BOOK CLUB (Oval Highlight + Tech Badges)
+       ========================================================= -->
+    <section class="max-w-[1170px] mx-auto px-5 sm:px-8 lg:px-10 py-10 sm:py-16 lg:py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+            <!-- Left Column: Heading with Hand-Drawn Orange Oval around "club" -->
+            <div class="lg:col-span-6 space-y-6">
+                <h2
+                    class="font-martian font-semibold text-[32px] sm:text-[42px] lg:text-[46px] leading-[1.22] tracking-[-0.02em] text-[#062630]">
+                    Not your average book
+                    <span class="relative inline-block px-1">
+                        club
+                        <!-- Hand-drawn orange oval SVG -->
+                        <svg class="absolute -inset-x-3.5 -inset-y-2 w-[calc(100%+28px)] h-[calc(100%+16px)] pointer-events-none text-[#FEA36F]"
+                            viewBox="0 0 180 76" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                            <path
+                                d="M158.5 16.5C134.2 5.4 76.4 2.8 36.8 14.5C7.6 23.1 -2.8 41.2 12.4 55.4C29.5 71.3 87.6 74.8 134.8 63.2C169.4 54.7 183.2 35.8 168.6 21.4C157.8 10.7 124.5 6.8 92.4 7.5"
+                                stroke="currentColor" stroke-width="2.75" stroke-linecap="round" />
+                        </svg>
+                    </span>
+                </h2>
+
+                <p class="text-[#385159] text-[17px] sm:text-[19px] leading-[1.6] max-w-[530px]">
+                    Connect with a community that speaks your language - from Python to TypeScript and everything in
+                    between. Our discussions blend technical depth with practical applications.
+                </p>
+            </div>
+
+            <!-- Right Column: Rounded Photo + Overlapping Tech Badges (TypeScript, GitHub, React) -->
+            <div class="lg:col-span-6 relative">
+                <div class="rounded-2xl overflow-hidden shadow-sm bg-[#E6E1DF]">
+                    <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1100&q=85"
+                        onerror="this.src='https://placehold.co/800x760/E6E1DF/062630?text=Tech+Community+Discussion'"
+                        alt="Three smiling software engineers sharing insights over a technical book"
+                        class="w-full h-[340px] sm:h-[450px] lg:h-[520px] object-cover object-center" />
+                </div>
+
+                <!-- Overlapping Cluster of Circular Tech Badges (Bottom-Left Edge on Desktop, Bottom-Right on Mobile) -->
+                <div class="hidden sm:block absolute -left-8 lg:-left-11 bottom-8 w-[124px] h-[124px] pointer-events-none select-none"
+                    aria-hidden="true">
+                    <!-- TypeScript Badge (Top-Right of Cluster) -->
+                    <div
+                        class="badge-float absolute top-0 right-1 w-12 h-12 rounded-full bg-[#3178C6] shadow-lg ring-4 ring-white flex items-center justify-center">
+                        <span class="font-sans font-bold text-white text-[15px] tracking-tighter">TS</span>
+                    </div>
+
+                    <!-- GitHub Badge (Bottom-Left of Cluster) -->
+                    <div
+                        class="badge-float-delay-1 absolute bottom-1 left-0 w-13 h-13 p-2.5 rounded-full bg-[#181717] shadow-lg ring-4 ring-white flex items-center justify-center">
+                        <svg class="w-7 h-7 text-white fill-current" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                        </svg>
+                    </div>
+
+                    <!-- React Badge (Bottom-Right of Cluster) -->
+                    <div
+                        class="badge-float-delay-2 absolute bottom-0 right-0 w-12 h-12 rounded-full bg-[#20232A] shadow-lg ring-4 ring-white flex items-center justify-center">
+                        <svg class="w-7 h-7 text-[#61DAFB]" viewBox="-11.5 -10.23174 23 20.46348" fill="none">
+                            <circle cx="0" cy="0" r="2.05" fill="currentColor" />
+                            <g stroke="currentColor" stroke-width="1.1">
+                                <ellipse rx="11" ry="4.2" />
+                                <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+                                <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================
+       SECTION 5: YOUR TECH READING JOURNEY (4-Step Card)
+       ========================================================= -->
+    <section class="max-w-[1170px] mx-auto px-5 sm:px-8 lg:px-10 py-14 sm:py-20">
+        <div
+            class="bg-journey-grid rounded-2xl px-6 sm:px-12 lg:px-14 py-14 sm:py-16 lg:py-20 border border-[#E6E1DF]/70">
+            <h2
+                class="font-martian font-semibold text-[30px] sm:text-[42px] lg:text-[46px] leading-[1.22] tracking-[-0.02em] text-[#062630] lg:text-center max-w-[540px] lg:mx-auto mb-12 sm:mb-16">
+                Your tech reading journey
+            </h2>
+
+            <!-- 4 Steps Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-7">
+                <!-- Step 1 -->
+                <div class="space-y-5">
+                    <div class="flex items-center justify-between">
+                        <span
+                            class="w-9 h-9 rounded-[4px] border-2 border-[#062630] font-martian font-semibold text-[16px] text-[#062630] flex items-center justify-center">
+                            1
+                        </span>
+                        <!-- Curved Orange Arrow (Visible on Desktop) -->
+                        <svg class="hidden lg:block w-20 h-6 text-[#FEA36F]" viewBox="0 0 80 24" fill="none"
+                            aria-hidden="true">
+                            <path d="M4 16C26 5 52 5 73 15" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                            <path d="M67 9L74 15.5L65 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <p class="font-martian font-semibold text-[16px] sm:text-[17px] leading-[1.4] text-[#062630]">
+                        Choose your membership tier
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="space-y-5">
+                    <div class="flex items-center justify-between">
+                        <span
+                            class="w-9 h-9 rounded-[4px] border-2 border-[#062630] font-martian font-semibold text-[16px] text-[#062630] flex items-center justify-center">
+                            2
+                        </span>
+                        <!-- Curved Orange Arrow (Visible on Desktop) -->
+                        <svg class="hidden lg:block w-20 h-6 text-[#FEA36F]" viewBox="0 0 80 24" fill="none"
+                            aria-hidden="true">
+                            <path d="M4 16C26 5 52 5 73 15" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                            <path d="M67 9L74 15.5L65 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <p class="font-martian font-semibold text-[16px] sm:text-[17px] leading-[1.4] text-[#062630]">
+                        Get your monthly book selection
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="space-y-5">
+                    <div class="flex items-center justify-between">
+                        <span
+                            class="w-9 h-9 rounded-[4px] border-2 border-[#062630] font-martian font-semibold text-[16px] text-[#062630] flex items-center justify-center">
+                            3
+                        </span>
+                        <!-- Curved Orange Arrow (Visible on Desktop) -->
+                        <svg class="hidden lg:block w-20 h-6 text-[#FEA36F]" viewBox="0 0 80 24" fill="none"
+                            aria-hidden="true">
+                            <path d="M4 16C26 5 52 5 73 15" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                            <path d="M67 9L74 15.5L65 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <p class="font-martian font-semibold text-[16px] sm:text-[17px] leading-[1.4] text-[#062630]">
+                        Join our discussion forums
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="space-y-5">
+                    <div class="flex items-center justify-between">
+                        <span
+                            class="w-9 h-9 rounded-[4px] border-2 border-[#062630] font-martian font-semibold text-[16px] text-[#062630] flex items-center justify-center">
+                            4
+                        </span>
+                    </div>
+                    <p class="font-martian font-semibold text-[16px] sm:text-[17px] leading-[1.4] text-[#062630]">
+                        Attend exclusive meetups
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================
+       SECTION 6: MEMBERSHIP OPTIONS (3 Pricing Cards)
+       ========================================================= -->
+    <section id="membership" class="max-w-[1040px] mx-auto px-5 sm:px-8 lg:px-10 py-14 sm:py-20 lg:py-24">
+        <h2
+            class="font-martian font-semibold text-[32px] sm:text-[42px] lg:text-[46px] leading-[1.2] tracking-[-0.02em] text-[#062630] lg:text-center mb-12 sm:mb-16">
+            Membership options
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-7 items-center">
+            <!-- Card 1: Starter -->
+            <div
+                class="rounded-xl border border-[#E6E1DF] bg-white p-7 sm:p-8 flex flex-col justify-between transition-shadow hover:shadow-md">
+                <div>
+                    <h3 class="font-martian font-semibold text-[22px] text-[#062630] mb-5">
+                        Starter
+                    </h3>
+                    <div class="flex items-baseline gap-2 pb-6 border-b border-[#E6E1DF]">
+                        <span class="font-martian font-bold text-[34px] text-[#062630]">$19</span>
+                        <span class="text-[#385159] text-[18px]">/month</span>
+                    </div>
+
+                    <ul class="py-6 space-y-4">
+                        <li class="flex items-center gap-3 text-[#385159] text-[17px]">
+                            <span
+                                class="w-5 h-5 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0">
+                                <svg class="w-3 h-3" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                            <span>1 book/month</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-[#385159] text-[17px]">
+                            <span
+                                class="w-5 h-5 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0">
+                                <svg class="w-3 h-3" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                            <span>Online forums</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button type="button" onclick="openMembershipModal('Starter', '$19/month')"
+                    class="btn-outline-dark w-full py-3.5 px-4 rounded-lg font-martian font-semibold text-[14px] tracking-wider uppercase text-center cursor-pointer">
+                    SUBSCRIBE NOW
+                </button>
+            </div>
+
+            <!-- Card 2: Pro (Highlighted with Warm Tint + Soft Blue Radial Glow & Elevated Padding) -->
+            <div
+                class="bg-pro-card rounded-xl border border-[#E6E1DF] p-7 sm:p-8 md:py-11 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                <div>
+                    <h3 class="font-martian font-semibold text-[22px] text-[#062630] mb-5">
+                        Pro
+                    </h3>
+                    <div class="flex items-baseline gap-2 pb-6 border-b border-[#DCD6D3]">
+                        <span class="font-martian font-bold text-[34px] text-[#062630]">$29</span>
+                        <span class="text-[#385159] text-[18px]">/month</span>
+                    </div>
+
+                    <ul class="py-6 space-y-4">
+                        <li class="flex items-center gap-3 text-[#385159] text-[17px]">
+                            <span
+                                class="w-5 h-5 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0">
+                                <svg class="w-3 h-3" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                            <span>2 books/month</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-[#385159] text-[17px]">
+                            <span
+                                class="w-5 h-5 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0">
+                                <svg class="w-3 h-3" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                            <span>Virtual meetups</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button type="button" onclick="openMembershipModal('Pro', '$29/month')"
+                    class="btn-outline-dark w-full py-3.5 px-4 rounded-lg font-martian font-semibold text-[14px] tracking-wider uppercase text-center cursor-pointer">
+                    SUBSCRIBE NOW
+                </button>
+            </div>
+
+            <!-- Card 3: Enterprise -->
+            <div
+                class="rounded-xl border border-[#E6E1DF] bg-white p-7 sm:p-8 flex flex-col justify-between transition-shadow hover:shadow-md">
+                <div>
+                    <h3 class="font-martian font-semibold text-[22px] text-[#062630] mb-5">
+                        Enterprise
+                    </h3>
+                    <div class="flex items-baseline gap-2 pb-6 border-b border-[#E6E1DF]">
+                        <span class="font-martian font-bold text-[34px] text-[#062630]">Custom</span>
+                    </div>
+
+                    <ul class="py-6 space-y-4">
+                        <li class="flex items-center gap-3 text-[#385159] text-[17px]">
+                            <span
+                                class="w-5 h-5 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0">
+                                <svg class="w-3 h-3" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                            <span>Team access</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-[#385159] text-[17px]">
+                            <span
+                                class="w-5 h-5 rounded-[4px] border-[1.75px] border-[#385159] flex items-center justify-center shrink-0">
+                                <svg class="w-3 h-3" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                            <span>Private sessions</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button type="button" onclick="openMembershipModal('Enterprise', 'Custom Team Plan')"
+                    class="btn-outline-dark w-full py-3.5 px-4 rounded-lg font-martian font-semibold text-[14px] tracking-wider uppercase text-center cursor-pointer">
+                    TALK TO US
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================
+       SECTION 7: TESTIMONIAL SECTION
+       ========================================================= -->
+    <section class="max-w-[960px] mx-auto px-5 sm:px-8 lg:px-10 pt-8 pb-20 sm:pb-28 text-left lg:text-center">
+        <!-- 5 Orange Stars -->
+        <div class="flex items-center lg:justify-center gap-1.5 mb-7" aria-label="5 out of 5 stars">
+            <svg class="w-5 h-5 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg class="w-5 h-5 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg class="w-5 h-5 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg class="w-5 h-5 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <svg class="w-5 h-5 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+        </div>
+
+        <blockquote
+            class="font-martian font-semibold text-[22px] sm:text-[28px] lg:text-[31px] leading-[1.35] tracking-[-0.015em] text-[#062630] mb-6">
+            "This book club transformed my technical reading from a solitary activity into an enriching community
+            experience. The discussions are gold!"
+        </blockquote>
+
+        <cite class="not-italic text-[#385159] text-[17px] sm:text-[18px]">
+            Sarah Chen, Software Architect
+        </cite>
+    </section>
+
+    <!-- =========================================================
+       SECTION 8: DARK SLATE FOOTER (Rounded Top Corners + Grid)
+       ========================================================= -->
+    <footer class="bg-footer-grid rounded-t-[20px] sm:rounded-t-[24px] text-white pt-14 sm:pt-20 pb-8">
+        <div class="max-w-[1170px] mx-auto px-5 sm:px-8 lg:px-10">
+            <!-- CTA Block -->
+            <div class="flex flex-col items-center text-center max-w-[680px] mx-auto pb-14 sm:pb-16">
+                <h2
+                    class="font-martian font-semibold text-[30px] sm:text-[42px] lg:text-[46px] leading-[1.2] tracking-[-0.02em] text-[#FAF5F3] mb-8">
+                    Ready to debug your reading list?
+                </h2>
+
+                <a href="#membership"
+                    class="btn-outline-light inline-flex items-center justify-center gap-3.5 px-6 sm:px-7 py-4 rounded-lg font-martian text-[14px] sm:text-[15px] font-semibold tracking-wider uppercase w-full sm:w-auto mb-6">
+                    <span>REVIEW MEMBERSHIP OPTIONS</span>
+                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M10 16V4M10 4L5 9M10 4L15 9" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
+
+                <!-- Avatar Stack + 5 Stars + Social Proof -->
+                <div class="flex items-center gap-3.5 text-left">
+                    <div class="flex -space-x-2.5 shrink-0">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
+                            onerror="this.src='https://placehold.co/80x80/FAF5F3/062630?text=A1'"
+                            alt="Developer member portrait"
+                            class="w-10 h-10 rounded-full object-cover ring-2 ring-[#062630]" />
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80"
+                            onerror="this.src='https://placehold.co/80x80/385159/FAF5F3?text=A2'"
+                            alt="Developer member portrait"
+                            class="w-10 h-10 rounded-full object-cover ring-2 ring-[#062630]" />
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80"
+                            onerror="this.src='https://placehold.co/80x80/FEA36F/062630?text=A3'"
+                            alt="Developer member portrait"
+                            class="w-10 h-10 rounded-full object-cover ring-2 ring-[#062630]" />
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-1" aria-label="5 out of 5 stars">
+                            <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <svg class="w-4 h-4 text-[#FEA36F] fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        </div>
+                        <p class="font-martian text-[12px] sm:text-[13px] text-[#FAF5F3]/90 tracking-tight">
+                            200+ developers joined already
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Divider Line + Copyright & Social Icons -->
+            <div class="border-t border-[#385159]/60 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="font-martian text-[13px] text-[#FAF5F3]/85">
+                    &copy; 2024 &ndash; Tech Book Club
+                </p>
+
+                <div class="flex items-center gap-5">
+                    <!-- Bluesky Butterfly Icon -->
+                    <a href="#bluesky" aria-label="Follow Tech Book Club on Bluesky"
+                        class="text-white/85 hover:text-[#FEA36F] transition-colors p-1">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 568 501">
+                            <path
+                                d="M123.121 33.6637C188.241 82.5526 258.281 181.681 284 234.873C309.719 181.681 379.759 82.5526 444.879 33.6637C491.866 -1.61183 568 -28.9064 568 57.9464C568 75.2916 558.055 203.659 552.222 224.501C531.947 296.954 458.067 315.434 392.347 304.249C507.222 323.8 536.444 388.56 473.333 453.32C353.473 576.312 301.061 422.461 287.631 383.039C285.169 375.812 284.017 372.431 284 375.306C283.983 372.431 282.831 375.812 280.369 383.039C266.939 422.461 214.527 576.312 94.6667 453.32C31.5556 388.56 60.7778 323.8 175.653 304.249C109.933 315.434 36.0535 296.954 15.7778 224.501C9.94525 203.659 0 75.2916 0 57.9464C0 -28.9064 76.1345 -1.61183 123.121 33.6637Z" />
+                        </svg>
+                    </a>
+
+                    <!-- LinkedIn Icon -->
+                    <a href="#linkedin" aria-label="Follow Tech Book Club on LinkedIn"
+                        class="text-white/85 hover:text-[#FEA36F] transition-colors p-1">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =========================================================
+       INTERACTIVE MEMBERSHIP MODAL (Replaces alert() cleanly)
+       ========================================================= -->
+    <div id="membershipModal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-[#062630]/60 backdrop-blur-xs p-4" role="dialog"
+        aria-modal="true" aria-labelledby="modalTitle">
+        <div class="bg-[#FAF5F3] border-2 border-[#062630] rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+            <button type="button" onclick="closeMembershipModal()" aria-label="Close modal"
+                class="absolute top-4 right-4 w-9 h-9 rounded-lg border border-[#062630]/20 flex items-center justify-center text-[#062630] hover:bg-white transition-colors cursor-pointer">
+                &times;
+            </button>
+
+            <span
+                class="inline-block font-martian text-xs uppercase tracking-wider px-2.5 py-1 rounded bg-[#FEA36F]/25 text-[#062630] mb-3">
+                Tech Book Club Membership
+            </span>
+
+            <h3 id="modalTitle" class="font-martian font-bold text-2xl text-[#062630] mb-1">
+                Join Pro Tier
+            </h3>
+            <p id="modalPrice" class="text-[#385159] font-medium mb-5">
+                $29/month
+            </p>
+
+            <form onsubmit="handleMembershipSubmit(event)" class="space-y-4">
+                <div>
+                    <label for="memberEmail" class="block text-sm font-medium text-[#062630] mb-1.5">
+                        Work or personal email
+                    </label>
+                    <input id="memberEmail" type="email" required placeholder="you@company.dev"
+                        class="w-full px-4 py-3 rounded-lg border-2 border-[#062630]/25 bg-white text-[#062630] focus:border-[#062630] focus:outline-none" />
+                </div>
+
+                <button type="submit"
+                    class="btn-outline-dark w-full py-3.5 rounded-lg font-martian font-semibold text-sm uppercase tracking-wider cursor-pointer">
+                    CONTINUE TO ONBOARDING
+                </button>
+            </form>
+
+            <p id="modalFeedback"
+                class="hidden mt-4 text-sm font-medium text-[#062630] bg-white p-3.5 rounded-lg border border-[#062630]/20">
+                Welcome aboard! Check your inbox for your reading list invite.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Interactive Membership Modal Logic
+        const modal = document.getElementById('membershipModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalPrice = document.getElementById('modalPrice');
+        const modalFeedback = document.getElementById('modalFeedback');
+
+        function openMembershipModal(tierName, tierPrice) {
+            modalTitle.textContent = tierName === 'Enterprise' ? 'Enterprise Team Inquiry' : `Join ${tierName} Tier`;
+            modalPrice.textContent = tierPrice;
+            modalFeedback.classList.add('hidden');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeMembershipModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function handleMembershipSubmit(event) {
+            event.preventDefault();
+            modalFeedback.classList.remove('hidden');
+            setTimeout(() => {
+                closeMembershipModal();
+            }, 1800);
+        }
+
+        // Close modal when clicking backdrop or pressing Escape
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeMembershipModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeMembershipModal();
+            }
+        });
+    </script>
+</body>
+
+</html>
